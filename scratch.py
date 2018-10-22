@@ -10,7 +10,7 @@ def game():
     while True:
         zapros = input('Еще карту ?')
         if zapros == 'y':
-
+        print('fuck off')
 game()
 
 
