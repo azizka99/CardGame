@@ -1,45 +1,112 @@
-def clear():
-    clear = "\n" * 10
-    print(clear)
+import random
+from collections import deque
+
+cards = deque()
+clear_deck = []
 
 
-cards = []
-a = 0
-b = 0
-c = 2
-f = 0
-uqadka = 0
-while  a < 10:
-    for i in range(4):
-        cards.append(c)
-    a += 1
-    c += 1
-while f < 3:
-    for i in range(4):
-        cards.append(10)
-    f += 1
-while True:
-    number = int(input('Номер карты: '))
-    print('================================================')
-    if number > 11:
-        k = input()
-        if k == 'exit':
-            break
+def create_deck():
+    bottomCard = 2
+    a = bottomCard
+    suitNum = 4
+    while a <= 14:
+        for i in range(suitNum):
+            clear_deck.append(a)
+        a += 1
+
+
+def shuffle_deck():
+    return random.sample(clear_deck, len(clear_deck))
+
+
+create_deck()
+cards += shuffle_deck()
+
+
+# ============================================================
+def real_num(current_card):
+    if current_card >= 12:
+        return 10
+    # elif current_card == 11:
+
     else:
-        if number == 0 or number == 1:
-            number1 = int(input())
-            number = number1
-        cards.remove(number)
-        print('Сколько таких карт осталось: ', cards.count(number))
-        print('------------------------------------------------------------')
-        print(cards)
-        print('------------------------------------------------------------')
-        print('Сколько вообщем карт осталось: ', len(cards))
-        print('============================================================')
-        if number == 2 or number == 3 or number == 4 or number == 5 or number == 6:
-            uqadka += 1
-        elif number == 10 or number == 11:
-            uqadka -= 1
-        print('plyus minus =', uqadka)
-        print('============================================================')
-        clear()
+        return current_card
+
+
+def printed_card(real_card):
+    if real_card == 12:
+        return 'Jack'
+    elif real_card == 13:
+        return 'Queen'
+    elif real_card == 14:
+        return 'King'
+    elif real_card == 11:
+        return 'Ace'
+    else:
+        return real_card
+
+
+# ============================================================
+def game():
+    dealer_hand = deque()
+    gamer_hand = deque()
+    lost = 0
+    dealer_hand.append(cards.popleft())
+    dealer_hand.append(cards.popleft())
+    dealerscore = real_num(dealer_hand[0]) + real_num(dealer_hand[1])
+    print('Dealer:', printed_card(dealer_hand[0]), printed_card(dealer_hand[1]))
+    gamer1 = cards.popleft()
+    gamer2 = cards.popleft()
+    gamerscore = real_num(gamer1) + real_num(gamer2)
+    print('Gamer: ', printed_card(gamer1), printed_card(gamer2))
+    while True:
+        if gamerscore == 21:
+            break
+        zapros = input('Еще карту ? ')
+        if zapros == 'y' or zapros == '1':
+            gamer1 = cards.popleft()
+            gamerscore += real_num(gamer1)
+            print(printed_card(gamer1), '|||', 'Ваш счет:', gamerscore)
+            if gamerscore > 21:
+                print('Вы проиграли :(')
+                lost = 1
+                break
+            elif gamerscore == 21:
+                break
+        if zapros == 'n' or zapros == '2':
+            break
+    if lost == 1:
+        return
+    while dealerscore < 17:
+        dealer1 = cards.popleft()
+        dealerscore += real_num(dealer1)
+        print('Dealer: ', printed_card(dealer1), '|||', 'Счет диллера:', dealerscore)
+    if dealerscore > 21:
+        print('Вы выиграли!')
+    elif dealerscore > gamerscore:
+        print('Выиграл Диллер!')
+    elif dealerscore < gamerscore:
+        print('Вы выиграли')
+    elif dealerscore == gamerscore:
+        print('Push')
+
+
+while True:
+    game()
+    ks = input('Продолжать игру 1/2')
+    if ks == '2' or ks == 'n':
+        break
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -46,20 +46,28 @@ def score(hand):
         current_score += 10
     return current_score
 
+def show(hand):
+    for i in hand:
+        print(printed_card(i), end = ' ')
+    print()
 
-    #============================================================
+
+#============================================================
 def game():
+
     dealer_hand = deque()
     gamer_hand = deque()
     lost = 0
     dealer_hand.append(cards.popleft())
     dealer_hand.append(cards.popleft())
     dealerscore = score(dealer_hand)
-    print('Dealer: ', printed_card(dealer_hand[0]), printed_card(dealer_hand[1]))
+    print('Dealer: ', end = '')
+    show(dealer_hand)
     gamer_hand.append(cards.popleft())
     gamer_hand.append(cards.popleft())
     gamerscore = score(gamer_hand)
-    print('Gamer: ', printed_card(gamer_hand[0]), printed_card(gamer_hand[1]))
+    print('Gamer: ', end = '')
+    show(gamer_hand)
     while True:
         if gamerscore == 21:
             break
@@ -67,7 +75,9 @@ def game():
         if zapros == 'y' or zapros == '1':
             gamer_hand.append(cards.popleft())
             gamerscore = score(gamer_hand)
-            print(printed_card(gamer_hand[-1]), '|||', 'Ваш счет:', gamerscore)
+            print('Gamer: ', end = '')
+            show(gamer_hand)
+            print('Ваш счет:', gamerscore)
             if gamerscore > 21:
                 print('Вы проиграли :(')
                 lost = 1
@@ -81,7 +91,9 @@ def game():
     while dealerscore < 17:
         dealer_hand.append(cards.popleft())
         dealerscore = score(dealer_hand)
-        print('Dealer: ', printed_card(dealer_hand[-1]), '|||', 'Счет диллера:', dealerscore)
+        print('Dealer: ', end= '')
+        show(dealer_hand)
+        print('Счет диллера:', dealerscore)
     if dealerscore > 21:
         print('Вы выиграли!')
     elif dealerscore > gamerscore:
