@@ -1,5 +1,6 @@
 import  random
-cards = []
+from collections import deque
+cards = deque()
 clear_deck = []
 
 def create_deck():
@@ -20,6 +21,9 @@ cards += shuffle_deck()
 def real_num(current_card):
     if current_card >= 12:
         return 10
+    # elif current_card == 11:
+        
+        
     else:
         return current_card
 def printed_card(real_card):
@@ -35,13 +39,15 @@ def printed_card(real_card):
         return  real_card
 #============================================================
 def game():
+    dealer_hand = deque()
+    gamer_hand = deque()
     lost = 0
-    dealer1 = cards.pop()
-    dealer2 = cards.pop()
+    dealer1 = cards.popleft()
+    dealer2 = cards.popleft()
     dealerscore = real_num(dealer1) + real_num(dealer2)
     print('Dealer:', printed_card(dealer1), printed_card(dealer2))
-    gamer1 = cards.pop()
-    gamer2 = cards.pop()
+    gamer1 = cards.popleft()
+    gamer2 = cards.popleft()
     gamerscore = real_num(gamer1) + real_num(gamer2)
     print('Gamer: ', printed_card(gamer1), printed_card(gamer2))
     while True:
@@ -49,7 +55,7 @@ def game():
             break
         zapros = input('Еще карту ? ')
         if zapros == 'y' or zapros == '1':
-            gamer1 = cards.pop()
+            gamer1 = cards.popleft()
             gamerscore += real_num(gamer1)
             print(printed_card(gamer1),'|||','Ваш счет:' ,gamerscore)
             if gamerscore > 21:
@@ -63,7 +69,7 @@ def game():
     if lost == 1:
         return
     while dealerscore < 17:
-        dealer1 = cards.pop()
+        dealer1 = cards.popleft()
         dealerscore += real_num(dealer1)
         print('Dealer: ', printed_card(dealer1),'|||','Счет диллера:' ,dealerscore)
     if dealerscore > 21:
