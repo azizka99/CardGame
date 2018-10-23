@@ -1,30 +1,71 @@
-cards = [2, 3, 4, 5, 6, 7, 8, 9, 2, 2, 2, 5]
+import  random
+cards = []
+clear_deck = []
+
+def create_deck():
+    bottomCard = 2
+    a = bottomCard
+    suitNum = 4
+    while a <= 14:
+        for i in range(suitNum):
+            clear_deck.append(a)
+        a += 1
+
+
+def shuffle_deck():
+    return random.sample(clear_deck, len(clear_deck))
+create_deck()
+cards += shuffle_deck()
+#============================================================
+def real_num(current_card):
+    if current_card >= 12:
+        return 10
+    else:
+        return current_card
+def printed_card(real_card):
+    if real_card == 12:
+        return 'Jack'
+    elif real_card == 13:
+        return 'Queen'
+    elif real_card == 14:
+        return 'King'
+    elif real_card == 11:
+        return 'Ace'
+    else:
+        return  real_card
+#============================================================
 def game():
+    lost = 0
     dealer1 = cards.pop()
     dealer2 = cards.pop()
-    dealerscore = dealer1 + dealer2
-    print('Dealer:', dealer1, dealer2)
+    dealerscore = real_num(dealer1) + real_num(dealer2)
+    print('Dealer:', printed_card(dealer1), printed_card(dealer2))
     gamer1 = cards.pop()
     gamer2 = cards.pop()
-    gamerscore = gamer1 + gamer2
-    print('Gamer: ', gamer1, gamer2)
+    gamerscore = real_num(gamer1) + real_num(gamer2)
+    print('Gamer: ', printed_card(gamer1), printed_card(gamer2))
     while True:
+        if gamerscore == 21:
+            break
         zapros = input('Еще карту ? ')
-        if zapros == 'y':
+        if zapros == 'y' or zapros == '1':
             gamer1 = cards.pop()
-            gamerscore += gamer1
-            print(gamer1, gamerscore)
+            gamerscore += real_num(gamer1)
+            print(printed_card(gamer1),'Ваш счет:' ,gamerscore)
             if gamerscore > 21:
                 print('Вы проиграли :(')
+                lost = 1
                 break
             elif gamerscore == 21:
                 break
-        if zapros == 'n':
+        if zapros == 'n' or zapros == '2':
             break
-    while dealerscore <= 17:
+    if lost == 1:
+        return
+    while dealerscore < 17:
         dealer1 = cards.pop()
-        dealerscore += dealer1
-        print(dealer1, dealerscore)
+        dealerscore += real_num(dealer1)
+        print('Dealer: ', printed_card(dealer1),'Счет диллера:' ,dealerscore)
     if dealerscore > 21:
         print('Вы выиграли!')
     elif dealerscore > gamerscore:
@@ -33,9 +74,11 @@ def game():
         print('Вы выиграли')
 
 
-
-game()
-
+while True:
+    game()
+    ks = input('Продолжать игру 1/2')
+    if ks == '2' or ks == 'n':
+        break
 
 
 
