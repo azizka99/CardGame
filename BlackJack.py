@@ -34,14 +34,14 @@ def printed_card(real_card):
 def score(hand):
     current_score = 0
     ace = 0
-    for i in range(len(hand)):
-        if hand[i] == 11:
+    for i in hand:
+        if i == 11:
             current_score += 1
             ace = 1
-        elif hand[i] >= 12:
+        elif i >= 12:
             current_score += 10
         else:
-            current_score += hand[i]
+            current_score += i
     if current_score <= 11 and ace == 1:
         current_score += 10
     return current_score
