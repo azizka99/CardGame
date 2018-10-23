@@ -1,4 +1,4 @@
-import  random
+import random
 from collections import deque
 cards = deque()
 clear_deck = []
@@ -18,14 +18,6 @@ def shuffle_deck():
 create_deck()
 cards += shuffle_deck()
 #============================================================
-def real_num(current_card):
-    if current_card >= 12:
-        return 10
-    # elif current_card == 11:
-        
-        
-    else:
-        return current_card
 def printed_card(real_card):
     if real_card == 12:
         return 'Jack'
@@ -36,28 +28,46 @@ def printed_card(real_card):
     elif real_card == 11:
         return 'Ace'
     else:
-        return  real_card
-#============================================================
+        return real_card
+
+
+def score(hand):
+    current_score = 0
+    ace = 0
+    for i in range(len(hand)):
+        if hand[i] == 11:
+            current_score += 1
+            ace = 1
+        elif hand[i] >= 12:
+            current_score += 10
+        else:
+            current_score += hand[i]
+    if current_score <= 11 and ace == 1:
+        current_score += 10
+    return current_score
+
+
+    #============================================================
 def game():
     dealer_hand = deque()
     gamer_hand = deque()
     lost = 0
-    dealer1 = cards.popleft()
-    dealer2 = cards.popleft()
-    dealerscore = real_num(dealer1) + real_num(dealer2)
-    print('Dealer:', printed_card(dealer1), printed_card(dealer2))
-    gamer1 = cards.popleft()
-    gamer2 = cards.popleft()
-    gamerscore = real_num(gamer1) + real_num(gamer2)
-    print('Gamer: ', printed_card(gamer1), printed_card(gamer2))
+    dealer_hand.append(cards.popleft())
+    dealer_hand.append(cards.popleft())
+    dealerscore = score(dealer_hand)
+    print('Dealer: ', printed_card(dealer_hand[0]), printed_card(dealer_hand[1]))
+    gamer_hand.append(cards.popleft())
+    gamer_hand.append(cards.popleft())
+    gamerscore = score(gamer_hand)
+    print('Gamer: ', printed_card(gamer_hand[0]), printed_card(gamer_hand[1]))
     while True:
         if gamerscore == 21:
             break
         zapros = input('Еще карту ? ')
         if zapros == 'y' or zapros == '1':
-            gamer1 = cards.popleft()
-            gamerscore += real_num(gamer1)
-            print(printed_card(gamer1),'|||','Ваш счет:' ,gamerscore)
+            gamer_hand.append(cards.popleft())
+            gamerscore = score(gamer_hand)
+            print(printed_card(gamer_hand[-1]), '|||', 'Ваш счет:', gamerscore)
             if gamerscore > 21:
                 print('Вы проиграли :(')
                 lost = 1
@@ -69,9 +79,9 @@ def game():
     if lost == 1:
         return
     while dealerscore < 17:
-        dealer1 = cards.popleft()
-        dealerscore += real_num(dealer1)
-        print('Dealer: ', printed_card(dealer1),'|||','Счет диллера:' ,dealerscore)
+        dealer_hand.append(cards.popleft())
+        dealerscore = score(dealer_hand)
+        print('Dealer: ', printed_card(dealer_hand[-1]), '|||', 'Счет диллера:', dealerscore)
     if dealerscore > 21:
         print('Вы выиграли!')
     elif dealerscore > gamerscore:
